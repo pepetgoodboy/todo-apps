@@ -1,6 +1,10 @@
 <template>
   <div class="w-1/2 flex flex-col mx-auto py-4 gap-3">
-    <h1 class="text-3xl">Daftar Todo</h1>
+    <div class="flex items-center gap-4">
+      <h1 class="text-3xl font-semibold">Daftar Todo</h1>
+      <NuxtLink to="/category">Add Category</NuxtLink>
+      <h1>Category</h1>
+    </div>
     <div class="flex gap-2">
       <input
         v-model="newTodo"

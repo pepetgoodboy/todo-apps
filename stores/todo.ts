@@ -23,9 +23,6 @@ export const useTodoStore = defineStore("todos", () => {
     if (todos) {
       todos.value = data.value;
     }
-
-    console.log("VALUE", data.value);
-    console.log("ERROR", error.value);
   };
 
   const addTodo = async (todo: string) => {
