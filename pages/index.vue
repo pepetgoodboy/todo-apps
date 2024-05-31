@@ -3,7 +3,6 @@
     <div class="flex items-center gap-4">
       <h1 class="text-3xl font-semibold">Daftar Todo</h1>
       <NuxtLink to="/category">Add Category</NuxtLink>
-      <h1>Category</h1>
     </div>
     <div class="flex gap-2">
       <input
@@ -13,6 +12,19 @@
         placeholder="Tambah tugas baru"
         @keyup.enter=""
       />
+      <select
+        v-model="selectedCategory"
+        class="px-4 bg-transparent border-2 border-blue-400"
+      >
+        <option disabled selected :value="null">Select Category</option>
+        <option
+          v-for="category in categories"
+          :key="category.id"
+          :value="category.id"
+        >
+          {{ category.name }}
+        </option>
+      </select>
       <button class="p-2 bg-blue-400 text-white" @click="addTodo">
         Tambah
       </button>
@@ -31,10 +43,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useTodoStore } from "~/stores/todo";
+import { useCategoryStore } from "~/stores/category";
 
 const todoStore = useTodoStore();
 const { getTodo, addTodo: addTodoSupabase, updateTodo, deleteTodo } = todoStore;
 const { todos } = storeToRefs(todoStore);
+
+const categoryStore = useCategoryStore();
+const { getCategories } = categoryStore;
+const { categories } = storeToRefs(categoryStore);
+getCategories();
+
+const selectedCategory = ref<number | null>();
 
 const newTodo = ref<string>("");
 
@@ -42,7 +62,7 @@ getTodo();
 
 const addTodo = async () => {
   if (newTodo.value.trim() !== "") {
-    await addTodoSupabase(newTodo.value);
+    await addTodoSupabase(newTodo.value, selectedCategory.value);
     newTodo.value = "";
   }
   await getTodo();
